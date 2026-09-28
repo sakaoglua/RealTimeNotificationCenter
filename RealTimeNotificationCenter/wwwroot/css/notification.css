@@ -1,0 +1,387 @@
+﻿/* ==========================================
+   Genel
+========================================== */
+
+body {
+    margin: 0;
+    padding: 40px;
+    background-color: #f5f5f5;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+
+/* ==========================================
+   Header
+========================================== */
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+    .header-actions form {
+        margin: 0;
+    }
+
+
+.logout-button {
+    padding: 8px 14px;
+    border: 1px solid #dc2626;
+    border-radius: 20px;
+    background-color: white;
+    color: #dc2626;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+    .logout-button:hover {
+        background-color: #dc2626;
+        color: white;
+    }
+
+.current-user {
+    margin: 6px 0 0;
+    color: #666;
+}
+
+.connection-status {
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.connected {
+    color: #166534;
+    background-color: #dcfce7;
+}
+
+.disconnected {
+    color: #991b1b;
+    background-color: #fee2e2;
+}
+
+
+/* ==========================================
+   Layout
+========================================== */
+
+.content-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(220px, 1fr);
+    gap: 24px;
+    align-items: start;
+}
+
+
+/* ==========================================
+   Online Kullanıcılar
+========================================== */
+
+.online-users-panel {
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+    .online-users-panel h2 {
+        margin-top: 0;
+        font-size: 20px;
+    }
+
+.online-users {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.online-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background-color: #f8fafc;
+    border-radius: 8px;
+}
+
+.online-indicator {
+    width: 10px;
+    height: 10px;
+    background-color: #22c55e;
+    border-radius: 50%;
+}
+
+
+/* ==========================================
+   Form Panelleri
+========================================== */
+
+.send-notification-panel {
+    margin-bottom: 28px;
+    padding: 22px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+    .send-notification-panel h2 {
+        margin-top: 0;
+    }
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+    .form-group label {
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        box-sizing: border-box;
+        width: 100%;
+        padding: 11px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 7px;
+        font-family: inherit;
+        font-size: 14px;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .form-group textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #2563eb;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+
+/* ==========================================
+   Butonlar
+========================================== */
+
+.send-notification-panel button {
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 7px;
+    background-color: #2563eb;
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+    .send-notification-panel button:hover {
+        background-color: #1d4ed8;
+    }
+
+    .send-notification-panel button:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+
+.group-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+    .group-buttons button:last-child {
+        background-color: #dc2626;
+    }
+
+        .group-buttons button:last-child:hover {
+            background-color: #b91c1c;
+        }
+
+
+/* ==========================================
+   Form Sonuç Mesajları
+========================================== */
+
+.form-result {
+    min-height: 20px;
+    margin-bottom: 0;
+    font-size: 14px;
+}
+
+    .form-result.success {
+        color: #15803d;
+    }
+
+    .form-result.error {
+        color: #b91c1c;
+    }
+
+
+/* ==========================================
+   Bildirimler
+========================================== */
+
+.notification-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.notification {
+    padding: 18px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    animation: fadeIn 0.25s ease;
+}
+
+.notification-title {
+    margin: 0 0 8px;
+    font-size: 18px;
+}
+
+.notification-message {
+    margin: 0 0 10px;
+    color: #444;
+}
+
+.notification-date {
+    color: #777;
+    font-size: 13px;
+}
+
+.notification-sender {
+    display: block;
+    margin-bottom: 8px;
+    color: #6d28d9;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.empty-message {
+    padding: 30px;
+    background-color: white;
+    border-radius: 10px;
+    text-align: center;
+    color: #777;
+}
+
+
+/* ==========================================
+   Özel Bildirimler
+========================================== */
+
+.private-notification {
+    border-left: 5px solid #7c3aed;
+}
+
+.private-badge {
+    display: inline-block;
+    margin-bottom: 10px;
+    padding: 4px 8px;
+    border-radius: 20px;
+    background-color: #ede9fe;
+    color: #6d28d9;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+
+/* ==========================================
+   Grup Bildirimleri
+========================================== */
+
+.group-notification {
+    border-left: 5px solid #0f766e;
+}
+
+.group-badge {
+    display: inline-block;
+    margin-bottom: 10px;
+    padding: 4px 8px;
+    border-radius: 20px;
+    background-color: #ccfbf1;
+    color: #0f766e;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+
+/* ==========================================
+   Sistem Mesajları
+========================================== */
+
+.system-message {
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    background-color: #eff6ff;
+    color: #1d4ed8;
+    font-size: 14px;
+}
+
+
+/* ==========================================
+   Animasyonlar
+========================================== */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* ==========================================
+   Responsive
+========================================== */
+
+@media (max-width: 700px) {
+    body {
+        padding: 20px;
+    }
+
+    .header {
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .group-buttons {
+        flex-direction: column;
+    }
+}

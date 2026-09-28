@@ -1,0 +1,42 @@
+﻿@model RealTimeNotificationCenter.Models.ViewModels.SignUpViewModel
+
+@{
+    Layout = null;
+    ViewData["Title"] = "SignUp";
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kayıt Ol</title>
+    <link rel="stylesheet" href="~/css/signUp.css" asp-append-version="true" />
+
+</head>
+<body>
+    <div class="signup-container">
+        <div class="sign-up card">
+            <div class="signup-header">
+                <h1>🔔 Bildirim Merkezi</h1>
+                <p>Devam etmek için kayıt olun</p>
+            </div>
+            <form action="/User/SignUp" method="post">
+                <div asp-validation-summary="ModelOnly" class="validation-summary-errors"></div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input name="Email" type="email" class="form-control" placeholder="ornek@email.com" required />
+                </div>
+                <div class="form-group">
+                    <label>Şifre</label>
+                    <input name="Password" type="password" class="form-control" placeholder="Şifrenizi girin" required />
+                </div>
+                <div class="form-group">
+                    <label>Parolayı onaylayın</label>
+                    <input name="ConfirmPassword" type="password" class="form-control" placeholder="Şifrenizi tekrar girin" required />
+                </div>
+                <button type="submit" class="btn-primary"> Kayıt Ol</button>
+            </form>
+        </div>
+</body>
+</html>

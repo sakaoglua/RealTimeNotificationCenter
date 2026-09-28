@@ -1,0 +1,862 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Bildirim Merkezi";
+}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gerçek Zamanlı Bildirim Merkezi</title>
+    <link rel="stylesheet" href="~/css/notification.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>🔔 Bildirim Merkezi</h1>
+                <p id="currentUser" class="current-user"></p>
+            </div>
+
+            <div class="header-actions">
+                <span id="connectionStatus"
+                      class="connection-status disconnected">
+                    Bağlantı kuruluyor...
+                </span>
+
+                <form action="/User/SignOut" method="post">
+                    <button type="submit" class="logout-button">
+                        Çıkış Yap
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <section>
+                <!-- Genel bildirim paneli -->
+                <div class="send-notification-panel">
+                    <h2>Genel Bildirim Gönder</h2>
+
+                    <form id="generalNotificationForm">
+
+                        <div class="form-group">
+                            <label for="generalNotificationTitle">
+                                Başlık
+                            </label>
+
+                            <input id="generalNotificationTitle"
+                                   type="text"
+                                   maxlength="200"
+                                   required
+                                   placeholder="Bildirim başlığı">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="generalNotificationMessage">
+                                Mesaj
+                            </label>
+
+                            <textarea id="generalNotificationMessage"
+                                      maxlength="1000"
+                                      required
+                                      placeholder="Bildirim mesajı"></textarea>
+                        </div>
+
+                        <button type="submit">
+                            Herkese Gönder
+                        </button>
+
+                        <p id="generalNotificationResult"
+                           class="form-result">
+                        </p>
+
+                    </form>
+                </div>
+                <!--Grup işlemleri paneli-->
+                <div class="send-notification-panel">
+                    <h2>Grup İşlemleri</h2>
+
+                    <div class="form-group">
+                        <label for="groupName">
+                            Grup
+                        </label>
+
+                        <select id="groupName">
+                            <option value="">
+                                Grup seçiniz
+                            </option>
+
+                            <option value="Yazılım">
+                                Yazılım
+                            </option>
+
+                            <option value="İnsan Kaynakları">
+                                İnsan Kaynakları
+                            </option>
+
+                            <option value="Satın Alma">
+                                Satın Alma
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="group-buttons">
+                        <button id="joinGroupButton"
+                                type="button">
+                            Gruba Katıl
+                        </button>
+
+                        <button id="leaveGroupButton"
+                                type="button">
+                            Gruptan Ayrıl
+                        </button>
+                    </div>
+
+                    <p id="groupResult"
+                       class="form-result">
+                    </p>
+                </div>
+
+                <!--Gruba bildirim gönder paneli-->
+                <div class="send-notification-panel">
+                    <h2>Gruba Bildirim Gönder</h2>
+
+                    <form id="groupNotificationForm">
+                        <div class="form-group">
+                            <label for="notificationGroup">
+                                Grup
+                            </label>
+
+                            <select id="notificationGroup"
+                                    required>
+
+                                <option value="">
+                                    Grup seçiniz
+                                </option>
+
+                                <option value="Yazılım">
+                                    Yazılım
+                                </option>
+
+                                <option value="İnsan Kaynakları">
+                                    İnsan Kaynakları
+                                </option>
+
+                                <option value="Satın Alma">
+                                    Satın Alma
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="groupNotificationTitle">
+                                Başlık
+                            </label>
+
+                            <input id="groupNotificationTitle"
+                                   type="text"
+                                   maxlength="200"
+                                   required
+                                   placeholder="Bildirim başlığı">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="groupNotificationMessage">
+                                Mesaj
+                            </label>
+
+                            <textarea id="groupNotificationMessage"
+                                      maxlength="1000"
+                                      required
+                                      placeholder="Bildirim mesajı"></textarea>
+                        </div>
+
+                        <button type="submit">
+                            Gruba Gönder
+                        </button>
+
+                        <p id="groupNotificationResult"
+                           class="form-result">
+                        </p>
+                    </form>
+                </div>
+
+                <!--Özel bildirim paneli-->
+                <div class="send-notification-panel">
+                    <h2>Özel Bildirim Gönder</h2>
+
+                    <form id="privateNotificationForm">
+                        <div class="form-group">
+                            <label for="recipientUser">
+                                Alıcı
+                            </label>
+
+                            <select id="recipientUser" required>
+                                <option value="">
+                                    Kullanıcı seçiniz
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notificationTitle">
+                                Başlık
+                            </label>
+
+                            <input id="notificationTitle"
+                                   type="text"
+                                   maxlength="200"
+                                   required
+                                   placeholder="Bildirim başlığı">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notificationMessage">
+                                Mesaj
+                            </label>
+
+                            <textarea id="notificationMessage"
+                                      maxlength="1000"
+                                      required
+                                      placeholder="Bildirim mesajı"></textarea>
+                        </div>
+
+                        <button id="sendNotificationButton"
+                                type="submit">
+                            Bildirim Gönder
+                        </button>
+
+                        <p id="formResult"
+                           class="form-result">
+                        </p>
+                    </form>
+                </div>
+
+                <h2>Bildirimler</h2>
+
+                <div id="notificationList" class="notification-list">
+                    <div id="emptyMessage" class="empty-message">
+                        Henüz bildirim bulunmuyor.
+                    </div>
+                </div>
+            </section>
+
+            <aside class="online-users-panel">
+                <h2>🟢 Online Kullanıcılar</h2>
+
+                <div id="onlineUsers"
+                     class="online-users">
+                </div>
+            </aside>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@@microsoft/signalr@8.0.7/dist/browser/signalr.min.js">
+    </script>
+
+    <script>
+
+        const generalNotificationForm = document.getElementById("generalNotificationForm");
+        const generalNotificationTitleElement = document.getElementById("generalNotificationTitle");
+        const generalNotificationMessageElement = document.getElementById("generalNotificationMessage");
+        const generalNotificationResultElement = document.getElementById("generalNotificationResult");
+        const groupNameElement = document.getElementById("groupName");
+        const joinGroupButton = document.getElementById("joinGroupButton");
+        const leaveGroupButton = document.getElementById("leaveGroupButton");
+        const groupResultElement = document.getElementById("groupResult");
+        const groupNotificationForm = document.getElementById("groupNotificationForm");
+        const notificationGroupElement = document.getElementById("notificationGroup");
+        const groupNotificationTitleElement = document.getElementById("groupNotificationTitle");
+
+            const groupNotificationMessageElement =
+                document.getElementById("groupNotificationMessage");
+
+            const groupNotificationResultElement =
+                document.getElementById("groupNotificationResult");
+            const privateNotificationForm = document.getElementById("privateNotificationForm");
+
+            const recipientUserElement = document.getElementById("recipientUser");
+
+            const notificationTitleElement = document.getElementById("notificationTitle");
+
+            const notificationMessageElement = document.getElementById("notificationMessage");
+
+            const sendNotificationButton = document.getElementById("sendNotificationButton");
+
+            const formResultElement = document.getElementById("formResult");
+
+            const connectionStatus = document.getElementById("connectionStatus");
+
+            const notificationList = document.getElementById("notificationList");
+
+            const emptyMessage = document.getElementById("emptyMessage");
+
+            const onlineUsersElement = document.getElementById("onlineUsers");
+
+            const currentUserElement = document.getElementById("currentUser");
+
+            const userName = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(User.Identity?.Name ?? ""));
+
+            currentUserElement.textContent = `Kullanıcı: ${userName}`;
+
+            // SignalR bağlantısı oluşturuluyor
+            const connection = new signalR.HubConnectionBuilder().withUrl("/notificationHub").withAutomaticReconnect().configureLogging(signalR.LogLevel.Information).build();
+
+            connection.on("ReceiveNotification", notification => {
+                console.log("Genel bildirim alındı:", notification);
+
+                addNotificationToScreen(
+                    notification,
+                    false
+                );
+            });
+
+            connection.on("ReceivePrivateNotification", notification => {
+                console.log("Özel bildirim alındı:", notification);
+
+                addNotificationToScreen(
+                    notification,
+                    true
+                );
+            });
+
+            connection.on("OnlineUsersUpdated", users => {
+                console.log("Online kullanıcılar:", users);
+
+                onlineUsersElement.innerHTML = "";
+
+                recipientUserElement.innerHTML = `
+                            <option value="">
+                                Kullanıcı seçiniz
+                            </option>
+                        `;
+
+                users.forEach(user => {
+                    const userElement =
+                        document.createElement("div");
+
+                    userElement.className = "online-user";
+
+                    const indicator =
+                        document.createElement("span");
+
+                    indicator.className = "online-indicator";
+
+                    const userNameElement =
+                        document.createElement("span");
+
+                    userNameElement.textContent = user;
+
+                    userElement.appendChild(indicator);
+                    userElement.appendChild(userNameElement);
+
+                    onlineUsersElement.appendChild(userElement);
+
+                    const isCurrentUser =
+                        user.toLocaleLowerCase("tr-TR") ===
+                        userName.toLocaleLowerCase("tr-TR");
+
+                    if (!isCurrentUser) {
+                        const option =
+                            document.createElement("option");
+
+                        option.value = user;
+                        option.textContent = user;
+
+                        recipientUserElement.appendChild(option);
+                    }
+                });
+            });
+
+            connection.on("UserConnected", connectedUserName => {
+                showSystemMessage(
+                    `${connectedUserName} bağlandı.`
+                );
+            });
+
+            connection.on("UserReconnected", reconnectedUserName => {
+                showSystemMessage(
+                    `${reconnectedUserName} yeniden bağlandı.`
+                );
+            });
+
+            connection.on("UserDisconnected", disconnectedUserName => {
+                showSystemMessage(
+                    `${disconnectedUserName} çevrimdışı oldu.`
+                );
+            });
+
+            connection.on(
+                "UserJoinedGroup",
+                (joinedUserName, groupName) => {
+                    showSystemMessage(
+                        `${joinedUserName}, ${groupName} grubuna katıldı.`
+                    );
+                }
+            );
+
+            connection.on(
+                "UserLeftGroup",
+                (leftUserName, groupName) => {
+                    showSystemMessage(
+                        `${leftUserName}, ${groupName} grubundan ayrıldı.`
+                    );
+                }
+            );
+
+            connection.on(
+                "ReceiveGroupNotification",
+                (groupName, notification) => {
+                    console.log(
+                        "Grup bildirimi alındı:",
+                        groupName,
+                        notification
+                    );
+
+                    addGroupNotificationToScreen(
+                        groupName,
+                        notification
+                    );
+                }
+            );
+
+            connection.onreconnecting(error => {
+                console.error("Bağlantı yeniden kuruluyor:", error);
+
+                setConnectionStatus(
+                    "Yeniden bağlanıyor...",
+                    false
+                );
+            });
+
+            connection.onreconnected(connectionId => {
+                console.log(
+                    "Bağlantı yeniden kuruldu:",
+                    connectionId
+                );
+
+                setConnectionStatus(
+                    "Bağlandı",
+                    true
+                );
+            });
+
+            connection.onclose(async error => {
+                console.error("Bağlantı kapandı:", error);
+
+                setConnectionStatus(
+                    "Bağlantı kesildi",
+                    false
+                );
+
+                await startConnection();
+            });
+
+            async function startConnection() {
+                try {
+                    await connection.start();
+
+                    console.log(
+                        "SignalR bağlantısı kuruldu:",
+                        connection.connectionId
+                    );
+
+                    setConnectionStatus(
+                        "Bağlandı",
+                        true
+                    );
+                } catch (error) {
+                    console.error(
+                        "SignalR bağlantı hatası:",
+                        error
+                    );
+
+                    setConnectionStatus(
+                        "Bağlantı kurulamadı",
+                        false
+                    );
+
+                    setTimeout(startConnection, 5000);
+                }
+            }
+
+            function setConnectionStatus(text, isConnected) {
+                connectionStatus.textContent = text;
+
+                connectionStatus.className =
+                    `connection-status ${isConnected
+                        ? "connected"
+                        : "disconnected"
+                    }`;
+            }
+
+            function escapeHtml(value) {
+                const element = document.createElement("div");
+                element.textContent = value ?? "";
+                return element.innerHTML;
+            }
+
+            function showSystemMessage(message)
+            {
+
+                const messageElement = document.createElement("div");
+
+                messageElement.className = "system-message";
+                messageElement.textContent = message;
+
+                notificationList.prepend(messageElement);
+
+                setTimeout(() =>
+                {
+                    messageElement.remove();
+                }, 5000);
+            }
+
+            function addNotificationToScreen(notification,isPrivate)
+            {
+                emptyMessage?.remove();
+
+                const notificationElement = document.createElement("div");
+
+                notificationElement.className = `notification ${isPrivate ? "private-notification" : ""}`;
+
+                const createdAt = new Date(notification.createdAt).toLocaleString("tr-TR");
+
+                notificationElement.innerHTML = `${isPrivate ? '<span class="private-badge">Size özel</span>' : ""}
+
+                ${notification.senderUserName ?
+                    `
+                    <span class="notification-sender">
+                    Gönderen: ${escapeHtml(notification.senderUserName)}
+                    </span>
+                    `
+                    : ""
+                }
+                <h2 class="notification-title">${escapeHtml(notification.title)}</h2>
+
+                <p class="notification-message">${escapeHtml(notification.message)}</p>
+
+                <span class="notification-date">${createdAt}</span>`;
+
+                notificationList.prepend(notificationElement);
+            }
+
+            function showFormResult(message, isSuccess) {
+                formResultElement.textContent = message;
+
+                formResultElement.className =`form-result ${isSuccess? "success": "error"}`;
+
+                setTimeout(() =>
+                {
+                    formResultElement.textContent = "";
+                    formResultElement.className = "form-result";
+                }, 4000);
+            }
+
+            function addGroupNotificationToScreen(groupName,notification) {
+                emptyMessage?.remove();
+
+                const notificationElement = document.createElement("div");
+
+                notificationElement.className ="notification group-notification";
+
+                const createdAt = new Date(notification.createdAt).toLocaleString("tr-TR");
+
+                notificationElement.innerHTML =
+                `<span class="group-badge">${escapeHtml(groupName)} grubu</span>
+
+                ${notification.senderUserName ? `
+                        <span class="notification-sender">
+                            Gönderen:${escapeHtml(notification.senderUserName)}
+                        </span>
+                        `
+                        : ""
+                }
+
+                <h2 class="notification-title">
+                    ${escapeHtml(notification.title)}
+                </h2>
+
+                <p class="notification-message">
+                    ${escapeHtml(notification.message)}
+                </p>
+
+                <span class="notification-date">
+                    ${createdAt}
+                </span>
+                `;
+
+                notificationList.prepend(notificationElement);
+            }
+
+            function showGroupResult(message, isSuccess) {
+                groupResultElement.textContent = message;
+
+                groupResultElement.className =
+                    `form-result ${isSuccess ? "success" : "error"}`;
+            }
+
+            function showGroupNotificationResult(message,isSuccess) {
+                groupNotificationResultElement.textContent = message;
+
+                groupNotificationResultElement.className = `form-result ${isSuccess ? "success" : "error"}`;
+
+                setTimeout(() => {
+                    groupNotificationResultElement.textContent = "";
+                    groupNotificationResultElement.className = "form-result";
+                }, 4000);
+            }
+            privateNotificationForm.addEventListener(
+                "submit",
+                async event => {
+                    event.preventDefault();
+
+                    const recipientUser = recipientUserElement.value;
+                    const title = notificationTitleElement.value.trim();
+                    const message = notificationMessageElement.value.trim();
+
+                    if (!recipientUser || !title || !message)
+                    {
+                        showFormResult("Lütfen tüm alanları doldurun.",false);
+                        return;
+                    }
+
+                    sendNotificationButton.disabled = true;
+                    sendNotificationButton.textContent = "Gönderiliyor...";
+
+                    try
+                    {
+                        const response = await fetch("/api/Notification/SendPrivateNotification",
+                        {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                userName: recipientUser,
+                                title,
+                                message
+                            })
+                        });
+                        const result = await response.json();
+
+                        if (!response.ok) {
+                            throw new Error(result.message ?? "Bildirim gönderilemedi.");
+                        }
+
+                        showFormResult(
+                            result.message,
+                            true
+                        );
+
+                        notificationTitleElement.value = "";
+                        notificationMessageElement.value = "";
+                    } catch (error) {
+                        console.error(
+                            "Bildirim gönderme hatası:",
+                            error
+                        );
+
+                        showFormResult(
+                            error.message,
+                            false
+                        );
+                    } finally {
+                        sendNotificationButton.disabled = false;
+                        sendNotificationButton.textContent =
+                            "Bildirim Gönder";
+                    }
+                }
+            );
+
+            generalNotificationForm.addEventListener(
+                "submit",
+                async event => {
+                    debugger
+                    event.preventDefault();
+                    const title = generalNotificationTitleElement.value.trim();
+                    const message = generalNotificationMessageElement.value.trim();
+
+                    if (!title || !message) {
+                    generalNotificationResultElement.textContent = "Lütfen tüm alanları doldurun.";
+                    generalNotificationResultElement.className = "form-result error";
+
+                    return;
+                    }
+                    try {
+                        const response = await fetch("/api/Notification/SendNotification",
+                        {
+                            method: "POST",
+                            headers: {"Content-Type": "application/json"},
+                            body: JSON.stringify({
+                                title,
+                                message
+                            })
+                        });
+
+                    const result = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(result.message ??"Bildirim gönderilemedi.");
+                    }
+
+                    generalNotificationResultElement.textContent =result.message;
+
+                    generalNotificationResultElement.className ="form-result success";
+
+                    generalNotificationTitleElement.value = "";
+                    generalNotificationMessageElement.value = "";
+
+                } catch (error) {
+
+                    generalNotificationResultElement.textContent =
+                        error.message;
+
+                    generalNotificationResultElement.className =
+                        "form-result error";
+                }
+            }
+        );
+
+            joinGroupButton.addEventListener("click", async () => {
+                const groupName = groupNameElement.value;
+
+                if (!groupName) {
+                    showGroupResult(
+                        "Lütfen bir grup seçin.",
+                        false
+                    );
+
+                    return;
+                }
+
+                try {
+                    await connection.invoke(
+                        "JoinGroup",
+                        groupName
+                    );
+
+                    showGroupResult(
+                        `${groupName} grubuna katıldınız.`,
+                        true
+                    );
+                } catch (error) {
+                    console.error(
+                        "Gruba katılma hatası:",
+                        error
+                    );
+
+                    showGroupResult(
+                        error.message,
+                        false
+                    );
+                }
+            });
+
+            leaveGroupButton.addEventListener("click", async () => {
+                const groupName = groupNameElement.value;
+
+                if (!groupName) {
+                    showGroupResult(
+                        "Lütfen bir grup seçin.",
+                        false
+                    );
+
+                    return;
+                }
+
+                try {
+                    await connection.invoke(
+                        "LeaveGroup",
+                        groupName
+                    );
+
+                    showGroupResult(
+                        `${groupName} grubundan ayrıldınız.`,
+                        true
+                    );
+                } catch (error) {
+                    console.error(
+                        "Gruptan ayrılma hatası:",
+                        error
+                    );
+
+                    showGroupResult(
+                        error.message,
+                        false
+                    );
+                }
+            });
+
+            groupNotificationForm.addEventListener(
+                "submit",
+                async event => {
+                    event.preventDefault();
+
+                    const groupName =
+                        notificationGroupElement.value;
+
+                    const title =
+                        groupNotificationTitleElement.value.trim();
+
+                    const message =
+                        groupNotificationMessageElement.value.trim();
+
+                    if (!groupName || !title || !message) {
+                        showGroupNotificationResult(
+                            "Lütfen tüm alanları doldurun.",
+                            false
+                        );
+
+                        return;
+                    }
+
+                    try {
+                        const response = await fetch(
+                            "/api/Notification/SendGroupNotification",
+                            {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify({
+                                    groupName,
+                                    title,
+                                    message
+                                })
+                            }
+                        );
+
+                        const result = await response.json();
+
+                        if (!response.ok) {
+                            throw new Error(
+                                result.message ??
+                                "Grup bildirimi gönderilemedi."
+                            );
+                        }
+
+                        showGroupNotificationResult(
+                            result.message,
+                            true
+                        );
+
+                        groupNotificationTitleElement.value = "";
+                        groupNotificationMessageElement.value = "";
+                    } catch (error) {
+                        console.error(
+                            "Grup bildirimi gönderme hatası:",
+                            error
+                        );
+
+                        showGroupNotificationResult(
+                            error.message,
+                            false
+                        );
+                    }
+                }
+            );
+
+            startConnection();
+    </script>
+</body>
+</html>
