@@ -134,7 +134,7 @@ public class NotificationHub : Hub
 
     private string GetUserName()
     {
-        var userName = Context.User?.Identity?.Name?.ToString();
+        var userName = Context.User?.Identity?.Name?.Trim();
 
         return string.IsNullOrWhiteSpace(userName)
             ? $"Misafir-{Context.ConnectionId[..5]}"

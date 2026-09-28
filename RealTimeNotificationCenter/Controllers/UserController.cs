@@ -8,8 +8,19 @@ using System.Diagnostics;
 namespace RealTimeNotificationCenter.Controllers
 {
     [Authorize]
-    public class UserController(ILogger<UserController> logger, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager) : Controller
+    public class UserController : Controller
     {
+        private readonly ILogger<UserController> _logger;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
+
+        public UserController(ILogger<UserController> logger, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        {
+            _logger = logger;
+            _userManager = userManager;
+            _signInManager = signInManager;
+        }
+
         [Authorize]
         public IActionResult Index()
         {
@@ -29,13 +40,20 @@ namespace RealTimeNotificationCenter.Controllers
             {
                 return View(model);
             }
+
+            if (!string.Equals(model.Password, model.ConfirmPassword, StringComparison.Ordinal))
+            {
+                ModelState.AddModelError(string.Empty, "Şifreler eşleşmiyor.");
+                return View(model);
+            }
+
             var userToCreate = new IdentityUser()
             {
-                UserName = model.Email,
-                Email = model.Email
+                UserName = model.UserName.Trim(),
+                Email = model.Email.Trim()
             };
 
-            var result = await userManager.CreateAsync(userToCreate, model.Password);
+            var result = await _userManager.CreateAsync(userToCreate, model.Password);
 
             if (!result.Succeeded)
             {
@@ -60,27 +78,31 @@ namespace RealTimeNotificationCenter.Controllers
             {
                 return View(model);
             }
-            var hasUser = await userManager.FindByEmailAsync(model.Email);
+
+            var userNameOrEmail = model.UserNameOrEmail.Trim();
+            var hasUser = await _userManager.FindByNameAsync(userNameOrEmail)
+                ?? await _userManager.FindByEmailAsync(userNameOrEmail);
 
             if (hasUser is null)
             {
-                ModelState.AddModelError(string.Empty, "Email or password is incorrect");
+                ModelState.AddModelError(string.Empty, "Kullanıcı adı/email veya şifre yanlış.");
                 return View(model);
             }
 
-            var result = await signInManager.PasswordSignInAsync(hasUser, model.Password, false, false);
+            var result = await _signInManager.PasswordSignInAsync(hasUser, model.Password, false, false);
 
             if (!result.Succeeded)
             {
-                ModelState.AddModelError(string.Empty, "Email or password is incorrect");
+                ModelState.AddModelError(string.Empty, "Kullanıcı adı/email veya şifre yanlış.");
                 return View(model);
             }
             return RedirectToAction(nameof(Index));
         }
         [HttpPost]
-        public async Task<IActionResult> SignOut()
+        [ValidateAntiForgeryToken]
+        public new async Task<IActionResult> SignOut()
         {
-            await signInManager.SignOutAsync();
+            await _signInManager.SignOutAsync();
 
             return RedirectToAction(nameof(SignIn));
         }
