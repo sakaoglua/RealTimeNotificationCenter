@@ -47,14 +47,16 @@ namespace RealTimeNotificationCenter.Controllers
         [HttpPost("SendPrivateNotification")]
         public async Task<IActionResult> SendPrivateNotification(PrivateNotificationRequest request)
         {
-            var senderUserName = User.Identity?.Name;
+            var senderUserName = User.Identity?.Name?.Trim();
 
             if (string.IsNullOrWhiteSpace(senderUserName))
             {
                 return Unauthorized();
             }
 
-            if (string.IsNullOrWhiteSpace(request.UserName))
+            var recipientUserName = request.UserName?.Trim();
+
+            if (string.IsNullOrWhiteSpace(recipientUserName))
             {
                 return BadRequest(new
                 {
@@ -62,7 +64,7 @@ namespace RealTimeNotificationCenter.Controllers
                 });
             }
 
-            if (string.Equals(request.UserName,senderUserName,StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(recipientUserName, senderUserName, StringComparison.OrdinalIgnoreCase))
             {
                 return BadRequest(new
                 {
@@ -70,13 +72,13 @@ namespace RealTimeNotificationCenter.Controllers
                 });
             }
 
-            var connectionIds = _onlineUserTrackerService.GetConnectionIds(request.UserName);
+            var connectionIds = _onlineUserTrackerService.GetConnectionIds(recipientUserName);
 
             if (connectionIds.Count == 0)
             {
                 return NotFound(new
                 {
-                    message = $"{request.UserName} şu anda online değil."
+                    message = $"{recipientUserName} şu anda online değil."
                 });
             }
 
@@ -88,12 +90,12 @@ namespace RealTimeNotificationCenter.Controllers
                 SenderUserName = senderUserName,
             };
 
-            await _hubContext.Clients.Clients(connectionIds).SendAsync("ReceivePrivateNotification",notification); // Sadece belirli clientlara bildirim gider.
+            await _hubContext.Clients.Clients(connectionIds).SendAsync("ReceivePrivateNotification", notification); // Sadece belirli clientlara bildirim gider.
 
             return Ok(new
             {
                 message =
-                    $"Bildirim yalnızca {request.UserName} kullanıcısına gönderildi.",
+                    $"Bildirim yalnızca {recipientUserName} kullanıcısına gönderildi.",
                 connectionCount = connectionIds.Count,
                 notification
             });
@@ -102,7 +104,7 @@ namespace RealTimeNotificationCenter.Controllers
         [HttpPost("SendGroupNotification")]
         public async Task<IActionResult> SendGroupNotification(GroupNotificationRequest request)
         {
-            var senderUserName = User.Identity?.Name;
+            var senderUserName = User.Identity?.Name?.Trim();
 
             if (string.IsNullOrWhiteSpace(senderUserName))
             {
@@ -114,14 +116,6 @@ namespace RealTimeNotificationCenter.Controllers
                 return BadRequest(new
                 {
                     message = "Grup adı zorunludur."
-                });
-            }
-
-            if (string.IsNullOrWhiteSpace(senderUserName))
-            {
-                return BadRequest(new
-                {
-                    message = "Gönderen kullanıcı adı zorunludur."
                 });
             }
 
@@ -146,7 +140,7 @@ namespace RealTimeNotificationCenter.Controllers
                 Title = request.Title.Trim(),
                 Message = request.Message.Trim(),
                 CreatedAt = DateTime.UtcNow,
-                SenderUserName = senderUserName.Trim(),
+                SenderUserName = senderUserName,
             };
 
             var groupName = request.GroupName.Trim();
@@ -160,6 +154,5 @@ namespace RealTimeNotificationCenter.Controllers
                 notification
             });
         }
-
     }
 }

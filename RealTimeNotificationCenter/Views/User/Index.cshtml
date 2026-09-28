@@ -26,6 +26,7 @@
                 </span>
 
                 <form action="/User/SignOut" method="post">
+                    @Html.AntiForgeryToken()
                     <button type="submit" class="logout-button">
                         Çıkış Yap
                     </button>

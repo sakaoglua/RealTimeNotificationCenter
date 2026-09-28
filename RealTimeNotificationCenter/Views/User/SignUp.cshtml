@@ -24,6 +24,10 @@
             <form action="/User/SignUp" method="post">
                 <div asp-validation-summary="ModelOnly" class="validation-summary-errors"></div>
                 <div class="form-group">
+                    <label>Kullanıcı Adı</label>
+                    <input name="UserName" type="text" class="form-control" placeholder="kullanici_adi" required />
+                </div>
+                <div class="form-group">
                     <label>Email</label>
                     <input name="Email" type="email" class="form-control" placeholder="ornek@email.com" required />
                 </div>

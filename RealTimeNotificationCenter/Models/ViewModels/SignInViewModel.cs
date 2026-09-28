@@ -2,5 +2,8 @@
 
 namespace RealTimeNotificationCenter.Models.ViewModels
 {
-    public record SignInViewModel([Required] string Email, [Required] string Password);
+    public record SignInViewModel(
+        [Required] string UserNameOrEmail,
+        [Required] string Password
+    );
 }
